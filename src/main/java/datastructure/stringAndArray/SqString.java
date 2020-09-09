@@ -95,5 +95,46 @@ public class SqString implements MyString {
         }
         return this;
     }
+
+    public int[] getNext() throws Exception {
+        int[] next = new int[curLen + 1];
+        next[0] = -1; next[1] = 0;
+        int k = 0, j = 1;
+        while(j < curLen){
+            if(strValue[k] == strValue[j]) {
+                next[j + 1] = next[j] + 1;
+                j++; k++;
+            }
+            else if(k == 0) {
+                next[j + 1] = 0;
+                j++;
+            }
+            else k = next[k];
+        }
+        return next;
+    }
+
+    public int KMP(SqString p, int begin) throws Exception{
+        int[] next = p.getNext();
+        int j = 0;
+        for(int i = begin; i < curLen;){
+            if(j == -1 || strValue[i] == p.charAt(j)){
+                i++; j++;
+            }else{
+                j = next[j];
+            }
+            if(j == p.length()){
+                return i - p.length();
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) throws Exception {
+        SqString sqString = new SqString("abcdabcefg");
+        SqString p = new SqString("efg");
+        int pp = sqString.KMP(p, 0);
+        return;
+    }
     
 }
